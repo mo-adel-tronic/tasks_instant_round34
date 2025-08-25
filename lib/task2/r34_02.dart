@@ -31,7 +31,7 @@ int solution(List<int> ribbons, int k) {
 }
 
 //from ai
-int solution2(List<int> ribbons, int k) {
+int solutionFromAI(List<int> ribbons, int k) {
   ribbons.sort();
   int left = 1;
   int right = ribbons.last; // largest ribbon
