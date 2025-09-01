@@ -1,0 +1,4 @@
+name: dart_crud_app
+dependencies:
+  dartz: ^0.10.1
+  equatable: ^2.0.0
