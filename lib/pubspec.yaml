@@ -1,4 +1,4 @@
-name: dart_crud_app
+name: r34_24
 description: A sample Dart clean architecture project
 version: 1.0.0
 
@@ -8,6 +8,7 @@ environment:
 dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.7
+  get_it: ^8.2.0
 
 dev_dependencies:
   lints: ^5.0.0
