@@ -11,7 +11,7 @@ void main() {
 int solution(List<int> ribbons, int k) {
   int result = 0;
   ribbons.sort();
-  List<int> myResult = [];
+  // List<int> myResult = [];
   for (int i = ribbons.last; i > 0; i--) {
     int numOfdata = 0;
     ribbons.forEach((r) {
