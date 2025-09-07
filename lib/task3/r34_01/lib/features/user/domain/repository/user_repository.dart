@@ -1,6 +1,6 @@
-import 'package:r34_16/core/error/failures.dart';
-import 'package:r34_16/features/users/domain/entities/user.dart';
+import '../entity/user_entity.dart';
 import 'package:dartz/dartz.dart';
+import 'package:r34_01/core/error/failures.dart';
 
 abstract class UserRepository {
   Either<Failure, List<User>> getAllUsers();
