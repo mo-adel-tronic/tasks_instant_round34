@@ -9,7 +9,7 @@ class Deleteuser {
   Deleteuser(this.repository);
 
   Either<Failure, bool> call(DeleteuserParams params) {
-    return repository.deleteuser(params.id);
+    return repository.deleteUser(params.id);
   }
 }
 

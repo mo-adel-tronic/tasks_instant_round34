@@ -9,7 +9,7 @@ class Adduser {
   Adduser(this.repository);
 
   Either<Failure, bool> call(AdduserParams params) {
-    return repository.adduser(params.id);
+    return repository.addUser(params.id);
   }
 }
 
