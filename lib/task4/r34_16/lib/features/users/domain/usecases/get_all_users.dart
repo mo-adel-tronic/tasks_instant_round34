@@ -1,0 +1,14 @@
+import 'package:r34_16/core/error/failures.dart';
+import 'package:r34_16/features/users/domain/entities/user.dart';
+import 'package:r34_16/features/users/domain/repositories/user_repository.dart';
+import 'package:dartz/dartz.dart';
+
+class GetAllUsers {
+  final UserRepository repository;
+
+  GetAllUsers(this.repository);
+
+  Future<Either<Failure, List<User>>> call() async {
+    return await repository.getAllUsers();
+  }
+}
