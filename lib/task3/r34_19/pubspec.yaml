@@ -1,0 +1,15 @@
+name: task3_flutter_clean_architecture
+description: A Flutter sample showing clean architecture skeleton for User, Post, Book
+publish_to: 'none'
+version: 1.0.0
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
