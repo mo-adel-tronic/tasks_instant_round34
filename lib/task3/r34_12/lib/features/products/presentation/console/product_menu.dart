@@ -1,13 +1,23 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:r34_12/features/products/presentation/services/product_console_service.dart';
 
 class ProductMenu {
   final ProductConsoleService _productService;
+  StreamSubscription<bool>? _loadingSub;
+  bool _isLoading = false;
 
-  ProductMenu(this._productService);
+  ProductMenu(this._productService) {
+    _loadingSub = _productService.loadingStream.listen((loading) {
+      _isLoading = loading;
+      if (loading) {
+        _showSpinnerWhileLoading();
+      }
+    });
+  }
 
-  void showMenu() {
-    subLoop: while (true) {
+  Future<void> showMenu() async {
+    menuLoop: while (true) {
       print("\n== PRODUCT MANAGEMENT SYSTEM ==");
       print('1. List all products');
       print('2. View product details');
@@ -15,59 +25,65 @@ class ProductMenu {
       print('4. Update product');
       print('5. Delete product');
       print('6. Back to main menu');
-      print('Enter your choice (1-6): ');
+      stdout.write('Enter your choice (1-6): ');
 
       final choice = stdin.readLineSync();
 
       switch (choice) {
         case '1':
-          _productService.displayAllProducts();
+          await _productService.displayAllProducts();
           break;
         case '2':
-          _viewProduct();
+          await _viewProduct();
           break;
         case '3':
-          _createProduct();
+          await _createProduct();
           break;
         case '4':
-          _updateProduct();
+          await _updateProduct();
           break;
         case '5':
-          _deleteProduct();
+          await _deleteProduct();
           break;
         case '6':
           print('Returning to main menu...');
-          break subLoop;
+          break menuLoop; 
         default:
           print('Invalid choice. Please try again.');
       }
     }
+
+    await _loadingSub?.cancel(); 
+    _productService.dispose();
   }
 
-  void _viewProduct() {
-    print('Enter product ID: ');
+  Future<void> _viewProduct() async {
+    stdout.write('Enter product ID: ');
     final id = stdin.readLineSync();
     if (id != null && id.isNotEmpty) {
-      _productService.displayProduct(id);
+      await _productService.displayProduct(id);
     } else {
       print('Product ID is required.');
     }
   }
 
-  void _createProduct() {
-    print('Enter product name: ');
+  Future<void> _createProduct() async {
+    stdout.write('Enter product name: ');
     final name = stdin.readLineSync();
-    print('Enter product description: ');
+    stdout.write('Enter product description: ');
     final description = stdin.readLineSync();
-    print('Enter product price: ');
+    stdout.write('Enter product price: ');
     final priceStr = stdin.readLineSync();
 
-    if (name != null && name.isNotEmpty &&
-        description != null && description.isNotEmpty &&
-        priceStr != null && priceStr.isNotEmpty) {
+    if (name != null &&
+        name.isNotEmpty &&
+        description != null &&
+        description.isNotEmpty &&
+        priceStr != null &&
+        priceStr.isNotEmpty) {
       try {
         final price = double.parse(priceStr);
-        _productService.createProduct(name, description, price);
+        await _productService.createProduct(name, description, price);
       } catch (e) {
         print('Invalid price format. Please enter a valid number.');
       }
@@ -76,23 +92,27 @@ class ProductMenu {
     }
   }
 
-  void _updateProduct() {
-    print('Enter product ID to update: ');
+  Future<void> _updateProduct() async {
+    stdout.write('Enter product ID to update: ');
     final id = stdin.readLineSync();
-    print('Enter new product name: ');
+    stdout.write('Enter new product name: ');
     final name = stdin.readLineSync();
-    print('Enter new product description: ');
+    stdout.write('Enter new product description: ');
     final description = stdin.readLineSync();
-    print('Enter new product price: ');
+    stdout.write('Enter new product price: ');
     final priceStr = stdin.readLineSync();
 
-    if (id != null && id.isNotEmpty &&
-        name != null && name.isNotEmpty &&
-        description != null && description.isNotEmpty &&
-        priceStr != null && priceStr.isNotEmpty) {
+    if (id != null &&
+        id.isNotEmpty &&
+        name != null &&
+        name.isNotEmpty &&
+        description != null &&
+        description.isNotEmpty &&
+        priceStr != null &&
+        priceStr.isNotEmpty) {
       try {
         final price = double.parse(priceStr);
-        _productService.updateProduct(id, name, description, price);
+        await _productService.updateProduct(id, name, description, price);
       } catch (e) {
         print('Invalid price format. Please enter a valid number.');
       }
@@ -101,13 +121,17 @@ class ProductMenu {
     }
   }
 
-  void _deleteProduct() {
-    print('Enter product ID to delete: ');
+  Future<void> _deleteProduct() async {
+    stdout.write('Enter product ID to delete: ');
     final id = stdin.readLineSync();
     if (id != null && id.isNotEmpty) {
-      _productService.deleteProduct(id);
+      await _productService.deleteProduct(id);
     } else {
       print('Product ID is required.');
     }
+  }
+
+  void _showSpinnerWhileLoading() {
+    print("Loading... Please wait.");
   }
 }

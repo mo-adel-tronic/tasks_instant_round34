@@ -23,6 +23,13 @@ class PostModel extends Post {
       'content': content,
     };
   }
+  Map<String, dynamic> toJsonForCreate(){
+    return{
+      'title': title,
+      'content': content,
+
+    };
+  }
 
   PostModel copyWith({
     String? id,

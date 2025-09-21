@@ -3,9 +3,9 @@ import 'package:r34_12/features/posts/domain/entities/post.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class PostRepository {
-  Either<Failure, List<Post>> getAllPosts();
-  Either<Failure, Post> getPost(String id);
-  Either<Failure, Post> createPost(Post post);
-  Either<Failure, Post> updatePost(Post post);
-  Either<Failure, bool> deletePost(String id);
+  Future<Either<Failure, List<Post>>> getAllPosts();
+  Future<Either<Failure, Post>> getPost(String id);
+  Future<Either<Failure, Post>> createPost(Post post);
+  Future<Either<Failure, Post>> updatePost(Post post);
+  Future<Either<Failure, bool>> deletePost(String id);
 }

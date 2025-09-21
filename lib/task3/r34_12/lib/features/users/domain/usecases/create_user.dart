@@ -9,7 +9,7 @@ class CreateUser {
 
   CreateUser(this.repository);
 
-  Either<Failure, User> call(CreateUserParams params) {
+  Future<Either<Failure, User>> call(CreateUserParams params) {
     return repository.createUser(params.user);
   }
 }

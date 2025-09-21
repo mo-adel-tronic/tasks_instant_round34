@@ -1,10 +1,10 @@
-import 'package:dartz/dartz.dart';
 import 'package:r34_12/core/error/exceptions.dart';
 import 'package:r34_12/core/error/failures.dart';
 import 'package:r34_12/features/posts/data/datasources/post_remote_datasource.dart';
 import 'package:r34_12/features/posts/data/models/post_model.dart';
 import 'package:r34_12/features/posts/domain/entities/post.dart';
 import 'package:r34_12/features/posts/domain/repositories/post_repository.dart';
+import 'package:dartz/dartz.dart';
 
 class PostRepositoryImpl implements PostRepository {
   final PostRemoteDataSource remoteDataSource;
@@ -12,9 +12,9 @@ class PostRepositoryImpl implements PostRepository {
   PostRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Either<Failure, List<Post>> getAllPosts() {
+  Future<Either<Failure, List<Post>>> getAllPosts() async {
     try {
-      final remotePosts = remoteDataSource.getAllPosts();
+      final remotePosts = await remoteDataSource.getAllPosts();
       return Right(remotePosts);
     } on ServerException {
       return Left(ServerFailure());
@@ -22,9 +22,9 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Either<Failure, Post> getPost(String id) {
+  Future<Either<Failure, Post>> getPost(String id) async {
     try {
-      final remotePost = remoteDataSource.getPost(id);
+      final remotePost = await remoteDataSource.getPost(id);
       return Right(remotePost);
     } on ServerException {
       return Left(ServerFailure());
@@ -32,14 +32,15 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Either<Failure, Post> createPost(Post post) {
+  Future<Either<Failure, Post>> createPost(Post post) async {
     try {
       final postModel = PostModel(
         id: post.id,
         title: post.title,
         content: post.content,
+        
       );
-      final newPost = remoteDataSource.createPost(postModel);
+      final newPost = await remoteDataSource.createPost(postModel);
       return Right(newPost);
     } on ServerException {
       return Left(ServerFailure());
@@ -47,14 +48,15 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Either<Failure, Post> updatePost(Post post) {
+  Future<Either<Failure, Post>> updatePost(Post post) async {
     try {
       final postModel = PostModel(
         id: post.id,
         title: post.title,
         content: post.content,
+        
       );
-      final updatedPost = remoteDataSource.updatePost(postModel);
+      final updatedPost = await remoteDataSource.updatePost(postModel);
       return Right(updatedPost);
     } on ServerException {
       return Left(ServerFailure());
@@ -62,9 +64,9 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Either<Failure, bool> deletePost(String id) {
+  Future<Either<Failure, bool>> deletePost(String id) async {
     try {
-      final result = remoteDataSource.deletePost(id);
+      final result = await remoteDataSource.deletePost(id);
       return Right(result);
     } on ServerException {
       return Left(ServerFailure());

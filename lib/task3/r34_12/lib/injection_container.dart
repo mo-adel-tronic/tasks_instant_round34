@@ -1,5 +1,8 @@
 import 'package:get_it/get_it.dart';
-//products
+import 'package:r34_12/core/network/api_provider.dart';
+import 'package:r34_12/core/network/http_provider.dart';
+
+// Products
 import 'package:r34_12/features/products/data/datasources/product_remote_datasource.dart';
 import 'package:r34_12/features/products/data/repositories/product_repositry_impl.dart';
 import 'package:r34_12/features/products/domain/repositories/product_repository.dart';
@@ -9,7 +12,8 @@ import 'package:r34_12/features/products/domain/usecases/get_all_products.dart';
 import 'package:r34_12/features/products/domain/usecases/get_product.dart';
 import 'package:r34_12/features/products/domain/usecases/update_product.dart';
 import 'package:r34_12/features/products/presentation/services/product_console_service.dart';
-//users
+
+// Users
 import 'package:r34_12/features/users/data/datasources/user_remote_datasource.dart';
 import 'package:r34_12/features/users/data/repositories/user_repositry_impl.dart';
 import 'package:r34_12/features/users/domain/repositories/user_repository.dart';
@@ -20,7 +24,7 @@ import 'package:r34_12/features/users/domain/usecases/get_user.dart';
 import 'package:r34_12/features/users/domain/usecases/update_user.dart';
 import 'package:r34_12/features/users/presentation/services/user_console_service.dart';
 
-//posts
+// Posts
 import 'package:r34_12/features/posts/data/datasources/post_remote_datasource.dart';
 import 'package:r34_12/features/posts/data/repositories/post_repository_impl.dart';
 import 'package:r34_12/features/posts/domain/repositories/post_repository.dart';
@@ -34,50 +38,53 @@ import 'package:r34_12/features/posts/presentation/services/post_console_service
 final sl = GetIt.instance;
 
 void init() {
-  // Data sources
+  // ✅ Core provider
+  sl.registerLazySingleton<ApiProvider>(() => HttpProvider());
+
+  // ✅ Data sources
   sl.registerLazySingleton<ProductRemoteDataSource>(
-    () => ProductRemoteDataSourceImpl(),
+    () => ProductRemoteDataSourceImpl(apiProvider: sl()),
   );
   sl.registerLazySingleton<UserRemoteDataSource>(
-    () => UserRemoteDataSourceImpl(),
+    () => UserRemoteDataSourceImpl(apiProvider: sl()),
   );
   sl.registerLazySingleton<PostRemoteDataSource>(
-    () => PostRemoteDataSourceImpl(),
+    () => PostRemoteDataSourceImpl(apiProvider: sl()),
   );
 
-  // Repository
+  // ✅ Repositories
   sl.registerLazySingleton<ProductRepository>(
     () => ProductRepositoryImpl(remoteDataSource: sl()),
   );
-   sl.registerLazySingleton<UserRepository>(
+  sl.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(remoteDataSource: sl()),
   );
   sl.registerLazySingleton<PostRepository>(
     () => PostRepositoryImpl(remoteDataSource: sl()),
   );
 
-  // Use cases - Products
+  // ✅ Use cases - Products
   sl.registerLazySingleton(() => GetAllProducts(sl()));
   sl.registerLazySingleton(() => GetProduct(sl()));
   sl.registerLazySingleton(() => CreateProduct(sl()));
   sl.registerLazySingleton(() => UpdateProduct(sl()));
   sl.registerLazySingleton(() => DeleteProduct(sl()));
 
-  // Use cases - Users
+  // ✅ Use cases - Users
   sl.registerLazySingleton(() => GetAllUsers(sl()));
   sl.registerLazySingleton(() => GetUser(sl()));
   sl.registerLazySingleton(() => CreateUser(sl()));
   sl.registerLazySingleton(() => UpdateUser(sl()));
   sl.registerLazySingleton(() => DeleteUser(sl()));
 
-  // Use cases - Posts
+  // ✅ Use cases - Posts
   sl.registerLazySingleton(() => GetAllPosts(sl()));
   sl.registerLazySingleton(() => GetPost(sl()));
   sl.registerLazySingleton(() => CreatePost(sl()));
   sl.registerLazySingleton(() => UpdatePost(sl()));
   sl.registerLazySingleton(() => DeletePost(sl()));
 
-  // Services - products
+  // ✅ Services - Products
   sl.registerLazySingleton(
     () => ProductConsoleService(
       getAllProductsUseCase: sl(),
@@ -88,7 +95,7 @@ void init() {
     ),
   );
 
-  // Services - users
+  // ✅ Services - Users
   sl.registerLazySingleton(
     () => UserConsoleService(
       getAllUsersUseCase: sl(),
@@ -99,7 +106,7 @@ void init() {
     ),
   );
 
-  // Services - posts
+  // ✅ Services - Posts
   sl.registerLazySingleton(
     () => PostConsoleService(
       getAllPostsUseCase: sl(),

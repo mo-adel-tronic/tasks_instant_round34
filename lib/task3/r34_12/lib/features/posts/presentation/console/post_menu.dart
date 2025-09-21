@@ -1,13 +1,23 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:r34_12/features/posts/presentation/services/post_console_service.dart';
 
 class PostMenu {
   final PostConsoleService _postService;
+  StreamSubscription<bool>? _loadingSub;
+  bool _isLoading = false;
 
-  PostMenu(this._postService);
+  PostMenu(this._postService) {
+    _loadingSub = _postService.lodingStream.listen((loading) {
+      _isLoading = loading;
+      if (loading) {
+        _showSpinnerWhileLoading();
+      }
+    });
+  }
 
-  void showMenu() {
-    subLoop: while (true) {
+  Future<void> showMenu() async {
+    menuLoop: while (true) {
       print("\n== Post MANAGEMENT SYSTEM ==");
       print('1. List all posts');
       print('2. View post details');
@@ -21,77 +31,103 @@ class PostMenu {
 
       switch (choice) {
         case '1':
-          _postService.displayAllPosts();
+          await _postService.displayAllPosts();
           break;
         case '2':
-          _viewPost();
+          await _viewPost();
           break;
         case '3':
-          _createPost();
+          await _createPost();
           break;
         case '4':
-          _updatePost();
+          await _updatePost();
           break;
         case '5':
-          _deletePost();
+          await _deletePost();
           break;
         case '6':
           print('Returning to main menu...');
-          break subLoop;
+          break menuLoop; 
         default:
           print('Invalid choice. Please try again.');
       }
     }
+
+    await _loadingSub?.cancel(); 
   }
 
-  void _viewPost() {
+  Future<void> _viewPost() async {
     stdout.write('Enter post ID: ');
     final id = stdin.readLineSync();
     if (id != null && id.isNotEmpty) {
-      _postService.displayPost(id);
+      await _postService.displayPost(id);
     } else {
-      print('⚠️ Post ID is required.');
+      print('Post ID is required.');
     }
   }
 
-  void _createPost() {
-    stdout.write('Enter post title: ');
+  Future<void> _createPost() async {
+    stdout.write('Enter post Title: ');
     final title = stdin.readLineSync();
     stdout.write('Enter post content: ');
     final content = stdin.readLineSync();
+    
 
-    if (title != null && title.isNotEmpty &&
-        content != null && content.isNotEmpty) {
-      _postService.createPost(title, content);
+    if (title != null &&
+        title.isNotEmpty &&
+        content != null &&
+        content.isNotEmpty 
+        ) {
+      try {
+        
+        await _postService.createPost(title, content);
+      } catch (e) {
+        print('Invalid price format. Please enter a valid number.');
+      }
     } else {
-      print('⚠️ All fields are required.');
+      print('All fields are required.');
     }
   }
 
-  void _updatePost() {
+  Future<void> _updatePost() async {
     stdout.write('Enter post ID to update: ');
     final id = stdin.readLineSync();
     stdout.write('Enter new post title: ');
     final title = stdin.readLineSync();
     stdout.write('Enter new post content: ');
     final content = stdin.readLineSync();
+    
 
-    if (id != null && id.isNotEmpty &&
-        title != null && title.isNotEmpty &&
-        content != null && content.isNotEmpty) {
-      _postService.updatePost(id, title, content);
+    if (id != null &&
+        id.isNotEmpty &&
+        title != null &&
+        title.isNotEmpty &&
+        content != null &&
+        content.isNotEmpty 
+        ) {
+      try {
+        
+        await _postService.updatePost(id, title, content);
+      } catch (e) {
+        print('Invalid price format. Please enter a valid number.');
+      }
     } else {
-      print('⚠️ All fields are required.');
+      print('All fields are required.');
     }
   }
 
-  void _deletePost() {
+  Future<void> _deletePost() async {
     stdout.write('Enter post ID to delete: ');
     final id = stdin.readLineSync();
     if (id != null && id.isNotEmpty) {
-      _postService.deletePost(id);
+      await _postService.deletePost(id);
     } else {
-      print('⚠️ Post ID is required.');
+      print('Post ID is required.');
     }
+  }
+
+  void _showSpinnerWhileLoading() {
+    
+    print("Loading... Please wait.");
   }
 }

@@ -8,7 +8,7 @@ class GetAllPosts {
 
   GetAllPosts(this.repository);
 
-  Either<Failure, List<Post>> call() {
+  Future<Either<Failure, List<Post>>> call() {
     return repository.getAllPosts();
   }
 }

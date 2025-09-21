@@ -9,7 +9,7 @@ class UpdateUser {
 
   UpdateUser(this.repository);
 
-  Either<Failure, User> call(UpdateUserParams params) {
+  Future<Either<Failure, User>> call(UpdateUserParams params) {
     return repository.updateUser(params.user);
   }
 }

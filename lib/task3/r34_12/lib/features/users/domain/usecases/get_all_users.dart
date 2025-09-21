@@ -8,7 +8,7 @@ class GetAllUsers {
 
   GetAllUsers(this.repository);
 
-  Either<Failure, List<User>> call() {
+  Future<Either<Failure, List<User>>> call() {
     return repository.getAllUsers();
   }
 }

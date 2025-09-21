@@ -9,7 +9,7 @@ class GetUser {
 
   GetUser(this.repository);
 
-  Either<Failure, User> call(GetUserParams params) {
+  Future<Either<Failure, User>> call(GetUserParams params) {
     return repository.getUser(params.id);
   }
 }

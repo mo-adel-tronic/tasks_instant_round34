@@ -98,6 +98,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "http",
+      "rootUri": "file:///C:/Users/KING1/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "http_multi_server",
       "rootUri": "file:///C:/Users/KING1/AppData/Local/Pub/Cache/hosted/pub.dev/http_multi_server-3.2.2",
       "packageUri": "lib/",
@@ -171,9 +177,9 @@
     },
     {
       "name": "pool",
-      "rootUri": "file:///C:/Users/KING1/AppData/Local/Pub/Cache/hosted/pub.dev/pool-1.5.1",
+      "rootUri": "file:///C:/Users/KING1/AppData/Local/Pub/Cache/hosted/pub.dev/pool-1.5.2",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.4"
     },
     {
       "name": "pub_semver",

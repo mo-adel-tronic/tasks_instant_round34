@@ -8,7 +8,7 @@ class DeletePost {
 
   DeletePost(this.repository);
 
-  Either<Failure, bool> call(DeletePostParams params) {
+  Future<Either<Failure, bool>> call(DeletePostParams params) {
     return repository.deletePost(params.id);
   }
 }

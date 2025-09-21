@@ -9,7 +9,7 @@ class GetPost {
 
   GetPost(this.repository);
 
-  Either<Failure, Post> call(GetPostParams params) {
+  Future<Either<Failure, Post>> call(GetPostParams params) {
     return repository.getPost(params.id);
   }
 }

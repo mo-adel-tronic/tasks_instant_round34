@@ -1,3 +1,4 @@
+// lib/features/products/data/models/product_model.dart
 import 'package:r34_12/features/products/domain/entities/product.dart';
 
 class ProductModel extends Product {
@@ -10,16 +11,24 @@ class ProductModel extends Product {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      price: json['price'].toDouble(),
+      id: json['id'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      price: (json['price'] as num).toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+    };
+  }
+
+  Map<String, dynamic> toJsonForCreate() {
+    return {
       'name': name,
       'description': description,
       'price': price,

@@ -1,59 +1,108 @@
-// lib/features/posts/data/datasources/post_remote_datasource.dart
+import 'package:r34_12/core/constants/url.dart';
 import 'package:r34_12/core/error/exceptions.dart';
-import 'package:r34_12/features/posts/data/models/post_model.dart';
+import 'package:r34_12/core/network/api_provider.dart';
+import 'package:r34_12/features/posts/domain/usecases/get_all_posts.dart';
+import 'package:r34_12/features/posts/domain/usecases/update_post.dart';
+import '../models/post_model.dart';
 
 abstract class PostRemoteDataSource {
-  List<PostModel> getAllPosts();
-  PostModel getPost(String id);
-  PostModel createPost(PostModel post);
-  PostModel updatePost(PostModel post);
-  bool deletePost(String id);
+  Future<List<PostModel>> getAllPosts();
+  Future<PostModel> getPost(String id);
+  Future<PostModel> createPost(PostModel post);
+  Future<PostModel> updatePost(PostModel post);
+  Future<bool> deletePost(String id);
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
-  final List<PostModel> _posts = [
-    const PostModel(id: '1', title: 'First Post', content: 'This is the content of the first post.'),
-    const PostModel(id: '2', title: 'Second Post', content: 'This is the content of the second post.'),
-  ];
-
+  final ApiProvider apiProvider;
+  static const _baseUrl = URLConstants.baseUrl + URLConstants.postsEndpoint;
+  
+  PostRemoteDataSourceImpl({required this.apiProvider});
+  
   @override
-  List<PostModel> getAllPosts() {
-    return List.unmodifiable(_posts); // حماية للـ list
-  }
-
-  @override
-  PostModel getPost(String id) {
+  Future<List<PostModel>> getAllPosts() async{
     try {
-      return _posts.firstWhere((post) => post.id == id);
-    } catch (_) {
+      final json = await apiProvider.get('$_baseUrl');
+
+      final List postsjson = json['posts'] as List;
+      return postsjson.map((p) => PostModel.fromJson(p as Map<String, dynamic>)).toList();
+
+    } catch(e){
       throw ServerException();
     }
   }
 
   @override
-  PostModel createPost(PostModel post) {
-    final newPost = post.copyWith(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-    );
-    _posts.add(newPost);
-    return newPost;
-  }
-
-  @override
-  PostModel updatePost(PostModel post) {
-    final index = _posts.indexWhere((p) => p.id == post.id);
-    if (index != -1) {
-      _posts[index] = post;
-      return post;
-    } else {
+  Future<PostModel> getPost(String id) async{
+    try{
+      final json = await apiProvider.get('$_baseUrl/$id');
+      return PostModel.fromJson(json as Map<String, dynamic>);
+    }catch(e){
       throw ServerException();
     }
   }
 
+
   @override
-  bool deletePost(String id) {
-    final initialLength = _posts.length;
-    _posts.removeWhere((post) => post.id == id);
-    return _posts.length < initialLength;
+  Future<PostModel> createPost(PostModel post) async{
+    try{
+      final body = post.toJsonForCreate();
+      final json = await apiProvider.post('$_baseUrl/add',body:body);
+      return PostModel.fromJson(json as Map<String, dynamic>);
+    }on NotFoundException{
+      throw NotFoundException();
+    }on BadRequestException{
+      throw BadRequestException();
+    }on UnauthorizedException{
+      throw UnauthorizedException();
+    }catch(e){
+
+      throw ServerException();
+    }
   }
+
+
+  @override
+  Future<PostModel> updatePost(PostModel post) async{
+    try{
+      final body = post.toJson();
+      final json = await apiProvider.put('$_baseUrl/${post.id}',body:body);
+      return PostModel.fromJson(json as Map<String, dynamic>);
+    }on NotFoundException{
+      throw NotFoundException();
+    }on BadRequestException{
+      throw BadRequestException();
+    }on UnauthorizedException{
+      throw UnauthorizedException();
+    }catch(e){
+
+      throw ServerException();
+    }
+  }
+
+
+
+  
+
+  @override
+  Future<bool> deletePost(String id) async{
+    try{
+     await apiProvider.delete('$_baseUrl/$id');
+     return true;
+     
+    }on NotFoundException{
+      throw NotFoundException();
+    }on BadRequestException{
+      throw BadRequestException();
+    }on UnauthorizedException{
+      throw UnauthorizedException();
+    }catch(e){
+
+      throw ServerException();
+    }
+  }
+  
+  
+  
+  
 }

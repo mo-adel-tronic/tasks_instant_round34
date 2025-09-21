@@ -1,13 +1,23 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:r34_12/features/users/presentation/services/user_console_service.dart';
 
 class UserMenu {
   final UserConsoleService _userService;
+  StreamSubscription<bool>? _loadingSub;
+  bool _isLoading = false;
 
-  UserMenu(this._userService);
+  UserMenu(this._userService) {
+    _loadingSub = _userService.lodingStream.listen((loading) {
+      _isLoading = loading;
+      if (loading) {
+        _showSpinnerWhileLoading();
+      }
+    });
+  }
 
-  void showMenu() {
-    subLoop: while (true) {
+  Future<void> showMenu() async {
+    menuLoop: while (true) {
       print("\n== User MANAGEMENT SYSTEM ==");
       print('1. List all users');
       print('2. View user details');
@@ -15,89 +25,108 @@ class UserMenu {
       print('4. Update user');
       print('5. Delete user');
       print('6. Back to main menu');
-      print('Enter your choice (1-6): ');
+      stdout.write('Enter your choice (1-6): ');
 
       final choice = stdin.readLineSync();
 
       switch (choice) {
         case '1':
-          _userService.displayAllUsers();
+          await _userService.displayAllUsers();
           break;
         case '2':
-          _viewUser();
+          await _viewUser();
           break;
         case '3':
-          _createUser();
+          await _createUser();
           break;
         case '4':
-          _updateUser();
+          await _updateUser();
           break;
         case '5':
-          _deleteUser();
+          await _deleteUser();
           break;
         case '6':
           print('Returning to main menu...');
-          break subLoop;
+          break menuLoop; 
         default:
           print('Invalid choice. Please try again.');
       }
     }
+
+    await _loadingSub?.cancel(); 
   }
 
-  void _viewUser() {
-    print('Enter user ID: ');
+  Future<void> _viewUser() async {
+    stdout.write('Enter user ID: ');
     final id = stdin.readLineSync();
     if (id != null && id.isNotEmpty) {
-      _userService.displayUser(id);
+      await _userService.displayUser(id);
+    } else {
+      print('User ID is required.');
+    }
+  }
+
+  Future<void> _createUser() async {
+    stdout.write('Enter user name: ');
+    final name = stdin.readLineSync();
+    stdout.write('Enter user email: ');
+    final email = stdin.readLineSync();
+    
+    if (name != null &&
+        name.isNotEmpty &&
+        email != null &&
+        email.isNotEmpty 
+      ) {
+      try {
+        
+        await _userService.createUser(name, email);
+      } catch (e) {
+        print('Invalid price format. Please enter a valid number.');
+      }
+    } else {
+      print('All fields are required.');
+    }
+  }
+
+  Future<void> _updateUser() async {
+    stdout.write('Enter user ID to update: ');
+    final id = stdin.readLineSync();
+    stdout.write('Enter new user name: ');
+    final name = stdin.readLineSync();
+    stdout.write('Enter new user email: ');
+    final email = stdin.readLineSync();
+    
+
+    if (id != null &&
+        id.isNotEmpty &&
+        name != null &&
+        name.isNotEmpty &&
+        email != null &&
+        email.isNotEmpty 
+        ) {
+      try {
+        
+        await _userService.updateUser(id, name, email);
+      } catch (e) {
+        print('Invalid price format. Please enter a valid number.');
+      }
+    } else {
+      print('All fields are required.');
+    }
+  }
+
+  Future<void> _deleteUser() async {
+    stdout.write('Enter user ID to delete: ');
+    final id = stdin.readLineSync();
+    if (id != null && id.isNotEmpty) {
+      await _userService.deleteUser(id);
     } else {
       print('user ID is required.');
     }
   }
 
-  void _createUser() {
-    print('Enter user name: ');
-    final name = stdin.readLineSync();
-    print('Enter user email: ');
-    final email = stdin.readLineSync();
-
-
-    if (name != null && name.isNotEmpty &&
-        email != null && email.isNotEmpty 
-        ) {
-      print('user creation');
-    } else {
-      print('All fields are required.');
-    }
-  }
-   
-  
-
-  void _updateUser() {
-    print('Enter user ID to update: ');
-    final id = stdin.readLineSync();
-    print('Enter new user name: ');
-    final name = stdin.readLineSync();
-    print('Enter new user email: ');
-    final email = stdin.readLineSync();
+  void _showSpinnerWhileLoading() {
     
-
-    if (id != null && id.isNotEmpty &&
-        name != null && name.isNotEmpty &&
-        email != null && email.isNotEmpty 
-        ) {
-      print('user updated');
-    } else {
-      print('All fields are required.');
-    }
-  }
-
-  void _deleteUser() {
-    print('Enter user ID to delete: ');
-    final id = stdin.readLineSync();
-    if (id != null && id.isNotEmpty) {
-      _userService.deleteUser(id);
-    } else {
-      print('Product ID is required.');
-    }
+    print("Loading... Please wait.");
   }
 }

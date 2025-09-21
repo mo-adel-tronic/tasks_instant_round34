@@ -8,7 +8,7 @@ class DeleteUser {
 
   DeleteUser(this.repository);
 
-  Either<Failure, bool> call(DeleteUserParams params) {
+  Future<Either<Failure, bool>> call(DeleteUserParams params) {
     return repository.deleteUser(params.id);
   }
 }
