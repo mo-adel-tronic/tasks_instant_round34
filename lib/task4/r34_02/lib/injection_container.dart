@@ -35,8 +35,9 @@ sl.registerLeazySingletoon<ProductRepository>(
 * remoteDataSource: sl() :  search in container (sl) about any object of RemoteDataSource
 }
  */
-
 import 'package:get_it/get_it.dart';
+import 'package:r34_02/core/network/api_provider.dart';
+import 'package:r34_02/core/network/http_provider.dart';
 import 'package:r34_02/features/products/data/datasources/product_remote_datasource.dart';
 import 'package:r34_02/features/products/data/repositories/product_repository.dart';
 import 'package:r34_02/features/products/domain/repositories/product_repository.dart';
@@ -71,10 +72,13 @@ void init() {
 
   //*sl.registerLeazySingletoon:  generate one object and use it any time (object will created when you called it first time)
 
+  sl.registerLazySingleton<APIProvider>(() => HttpProvider());
+
   //Product
   //Data Source
+  //sl.registerLazySingleton<http.Client>(() => http.Client());
   sl.registerLazySingleton<ProductRemoteDataSource>(
-    () => ProductRemoteDataSourceImpl(),
+    () => ProductRemoteDataSourceImpl(apiProvider: sl()),
   );
 
   //Repository
@@ -104,9 +108,8 @@ void init() {
   //User
   //DataSource
   sl.registerLazySingleton<UserRemoteDataSource>(
-    () => UserRemoteDataSourceImpl(),
+    () => UserRemoteDataSourceImpl(apiProvider: sl()),
   );
-
   //Repository
   sl.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(userRemoteDataSource: sl()),
@@ -134,7 +137,7 @@ void init() {
 
   //DataSource
   sl.registerLazySingleton<PostRemoteDataSource>(
-    () => PostRemoteDataSourceImpl(),
+    () => PostRemoteDataSourceImpl(apiProvider: sl()),
   );
 
   //Repository

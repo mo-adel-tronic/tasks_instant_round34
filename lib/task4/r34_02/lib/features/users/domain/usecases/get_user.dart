@@ -7,7 +7,7 @@ import 'package:r34_02/features/users/domain/repositories/user_repository.dart';
 class GetUser {
   final UserRepository repository;
   GetUser(this.repository);
-  Either<Failure, User> call(GetUserParam params) {
+  Future<Either<Failure, User>> call(GetUserParam params) {
     return repository.getUser(params.id);
   }
 }

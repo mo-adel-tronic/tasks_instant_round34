@@ -11,71 +11,110 @@ class PostRepositoryImpl implements PostRepository {
 
   PostRepositoryImpl({required this.postRemoteDataSource});
 
-  //return Post if success or failur if failed
   @override
-  Either<Failure, List<Post>> getAllPosts() {
+  Future<Either<Failure, List<Post>>> getAllPosts() async {
     try {
-      return Right(postRemoteDataSource.getAllPosts());
+      final posts = await postRemoteDataSource.getAllPosts();
+      return Right(posts);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, Post> getPost(String id) {
+  Future<Either<Failure, Post>> getPost(String id) async {
     try {
-      return Right(postRemoteDataSource.getPost(id));
+      final post = await postRemoteDataSource.getPost(id);
+      return Right(post);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, Post> createPost(Post post) {
+  Future<Either<Failure, Post>> createPost(Post post) async {
     final model = PostModel(
       id: post.id,
       title: post.title,
-      numOfLikes: post.numOfLikes,
-      text: post.text,
+      body: post.body,
+      tags: post.tags,
+      views: post.views,
+      userId: post.userId,
     );
 
     try {
-      return Right(postRemoteDataSource.createPost(model));
+      final created = await postRemoteDataSource.createPost(model);
+      return Right(created);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, Post> updatePost(Post post) {
+  Future<Either<Failure, Post>> updatePost(Post post) async {
     final model = PostModel(
       id: post.id,
       title: post.title,
-      numOfLikes: post.numOfLikes,
-      text: post.text,
+      body: post.body,
+      tags: post.tags,
+      views: post.views,
+      userId: post.userId,
     );
+
     try {
-      return Right(postRemoteDataSource.updatePost(model));
+      final updated = await postRemoteDataSource.updatePost(model);
+      return Right(updated);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, bool> deletePost(String id) {
+  Future<Either<Failure, bool>> deletePost(String id) async {
     try {
-      return Right(postRemoteDataSource.deletePost(id));
+      final result = await postRemoteDataSource.deletePost(id);
+      return Right(result);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }

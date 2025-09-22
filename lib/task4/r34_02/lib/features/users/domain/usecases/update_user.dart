@@ -8,7 +8,7 @@ import 'package:r34_02/features/users/domain/repositories/user_repository.dart';
 class UpdateUser {
   final UserRepository repository;
   UpdateUser(this.repository);
-  Either<Failure, User> call(UpdateUserParam params) {
+  Future<Either<Failure, User>> call(UpdateUserParam params) {
     return repository.updateUser(params.user);
   }
 }

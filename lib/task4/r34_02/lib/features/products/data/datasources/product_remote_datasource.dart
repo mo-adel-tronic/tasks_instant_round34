@@ -1,72 +1,99 @@
+import 'package:r34_02/core/constants/url_constants.dart';
 import 'package:r34_02/core/error/exceptions.dart';
+import 'package:r34_02/core/network/api_provider.dart';
 import 'package:r34_02/features/products/data/models/product_model.dart';
 
 abstract class ProductRemoteDataSource {
-  List<ProductModel> getAllProducts();
-  ProductModel getProduct(String id);
-  ProductModel createProduct(ProductModel model);
-  ProductModel updateProduct(ProductModel model);
-  bool deleteProduct(String id);
+  Future<List<ProductModel>> getAllProducts();
+  Future<ProductModel> getProduct(String id);
+  Future<ProductModel> createProduct(ProductModel model);
+  Future<ProductModel> updateProduct(ProductModel model);
+  Future<bool> deleteProduct(String id);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
-  final List<ProductModel> _products = [
-    ProductModel(id: "1", name: "p1", price: 20, description: "description1"),
-    ProductModel(id: "2", name: "p2", price: 20, description: "description2"),
-    ProductModel(id: "3", name: "p3", price: 20, description: "description3"),
-    ProductModel(id: "4", name: "p4", price: 20, description: "description4"),
-    ProductModel(id: "5", name: "p5", price: 20, description: "description5"),
-  ];
+  final APIProvider apiProvider;
+  ProductRemoteDataSourceImpl({required this.apiProvider});
+
+  static const String _baseUrl =
+      "${URLConstants.baseURL}${URLConstants.productsEndPoint}";
 
   @override
-  List<ProductModel> getAllProducts() {
-    return _products;
-  }
-
-  @override
-  ProductModel getProduct(String id) {
+  Future<List<ProductModel>> getAllProducts() async {
     try {
-      return _products.firstWhere((p) => p.id == id); //or use orElse
+      final data = await apiProvider.get(_baseUrl); //get data
+      final List productsJson =
+          data["products"] as List; //get list from it (casting)
+      return productsJson
+          .map((json) => ProductModel.fromJson(json as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      throw ServerException(); //Your exception
-    }
-  }
-
-  @override
-  ProductModel createProduct(ProductModel model) {
-    /*create new product with data:
-     newId = DateTime.now()..
-     newPrice = model.price
-    */
-    final ProductModel newProduct = model.copyWith(
-      newId: DateTime.now().microsecondsSinceEpoch.toString(),
-    );
-    _products.add(newProduct);
-    return newProduct;
-  }
-
-  @override
-  ProductModel updateProduct(ProductModel model) {
-    final int productIndex = _products.indexWhere((p) => p.id == model.id);
-    if (productIndex != -1) {
-      _products[productIndex] = model; //update data
-
-      /*final ProductModel updatedProduct = model.copyWith(
-      newName: model.name ,
-      newDescription: model.description ,
-      newPrice: model.price
-    );*/
-      //return updatedProduct;
-      return model;
-    } else {
+      print(e);
       throw ServerException();
     }
   }
 
   @override
-  bool deleteProduct(String id) {
-    final oldLength = _products.length;
-    _products.removeWhere((p) => id == p.id);
-    return _products.length < oldLength;
+  Future<ProductModel> getProduct(String id) async {
+    try {
+      final data = await apiProvider.get("$_baseUrl/$id");
+      return ProductModel.fromJson(data as Map<String, dynamic>);
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ProductModel> createProduct(ProductModel model) async {
+    try {
+      final data = await apiProvider.post(
+        "$_baseUrl/add",
+        body: model.toJsonCreate(),
+      );
+      return ProductModel.fromJson(data as Map<String, dynamic>); //casting
+    } on NotFoundException {
+      throw NotFoundException();
+    } on BadRequestException {
+      throw BadRequestException();
+    } on UnAuthorizedException {
+      throw UnAuthorizedException();
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ProductModel> updateProduct(ProductModel model) async {
+    try {
+      final data = await apiProvider.put(
+        "$_baseUrl/${model.id}",
+        body: model.toJsonCreate(),
+      );
+      return ProductModel.fromJson(data as Map<String, dynamic>); //casting
+    } on NotFoundException {
+      throw NotFoundException();
+    } on BadRequestException {
+      throw BadRequestException();
+    } on UnAuthorizedException {
+      throw UnAuthorizedException();
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<bool> deleteProduct(String id) async {
+    try {
+      await apiProvider.delete("$_baseUrl/$id");
+      return true;
+    } on NotFoundException {
+      throw NotFoundException();
+    } on BadRequestException {
+      throw BadRequestException();
+    } on UnAuthorizedException {
+      throw UnAuthorizedException();
+    } catch (e) {
+      throw ServerException();
+    }
   }
 }

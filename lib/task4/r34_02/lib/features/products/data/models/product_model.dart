@@ -11,16 +11,27 @@ class ProductModel extends Product {
   //factory to return object,, and using named constructor (because we send different data on constructor)
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'],
-      name: json['name'],
-      price: json['price'],
+      id: json["id"].toString(),
+      name: json["title"] ?? "", // title → name
+      price: (json["price"] as num?)?.toDouble() ?? 0.0,
       description: json['description'],
     );
   }
 
   //return map that will used in jsonEncode
   Map<String, dynamic> toJson() {
-    return {'id': id, 'name': name, 'price': price, 'description': description};
+    return {
+      'id': id,
+      'title': name,
+      'price': price,
+      'description': description,
+    };
+  }
+
+  //return map that will used in jsonEncode
+  //like toJson but without id
+  Map<String, dynamic> toJsonCreate() {
+    return {'title': name, 'price': price, 'description': description};
   }
 
   /*

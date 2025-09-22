@@ -5,14 +5,13 @@ import 'package:r34_02/features/products/domain/entities/product.dart';
 import 'package:r34_02/features/products/domain/repositories/product_repository.dart';
 
 class GetProduct {
-  final ProductRepository prductRepository;
-  GetProduct(this.prductRepository);
-  Either<Failure, Product> call(GetProductParam getProductParam) {
-    return prductRepository.getProduct(getProductParam.id);
+  final ProductRepository productRepository;
+  GetProduct(this.productRepository);
+
+  Future<Either<Failure, Product>> call(GetProductParam params) {
+    return productRepository.getProduct(params.id);
   }
 }
-
-//create class for parameters that will sent to get product(to edit in it in any time) (some type of isolation)
 
 class GetProductParam extends Equatable {
   final String id;

@@ -3,13 +3,13 @@ import 'package:r34_02/core/error/failures.dart';
 import '../entities/post.dart';
 
 abstract class PostRepository {
-  Either<Failure, List<Post>> getAllPosts();
+  Future<Either<Failure, List<Post>>> getAllPosts();
   //why Either from dartz library?  getAllPost will return List of Post or failur
 
-  Either<Failure, Post> getPost(String id);
-  Either<Failure, Post> createPost(Post post);
-  Either<Failure, Post> updatePost(Post post);
-  Either<Failure, bool> deletePost(String id);
+  Future<Either<Failure, Post>> getPost(String id);
+  Future<Either<Failure, Post>> createPost(Post post);
+  Future<Either<Failure, Post>> updatePost(Post post);
+  Future<Either<Failure, bool>> deletePost(String id);
 }
 
 //implement them in data layer

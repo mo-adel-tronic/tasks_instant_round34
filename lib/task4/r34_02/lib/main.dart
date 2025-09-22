@@ -7,16 +7,16 @@ import 'package:r34_02/features/products/presentation/services/product_console_s
 import 'package:r34_02/features/users/presentation/services/user_console_service.dart';
 import 'injection_container.dart' as my_container;
 
-void main() {
-  //initialize dependency injection
+Future<void> main() async {
+  // initialize dependency injection
   my_container.init();
 
-  //Start Menus
+  // Start Menus
   final productMenu = ProductMenu(my_container.sl<ProductConsoleService>());
   final postMenu = PostMenu(my_container.sl<PostConsoleService>());
   final userMenu = UserMenu(my_container.sl<UserConsoleService>());
 
   final mainMenu = MainMenu(postMenu, productMenu, userMenu);
 
-  mainMenu.showMainMenu();
+  await mainMenu.showMainMenu();
 }

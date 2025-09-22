@@ -8,7 +8,7 @@ import 'package:r34_02/features/posts/domain/repositories/post_repository.dart';
 class CreatePost {
   final PostRepository repository;
   CreatePost(this.repository);
-  Either<Failure, Post> call(CreatePostParam params) {
+  Future<Either<Failure, Post>> call(CreatePostParam params) {
     return repository.createPost(params.post);
   }
 }

@@ -12,6 +12,7 @@ dependencies:
   dartz: ^0.10.1
   get_it: ^8.2.0
   path: ^1.9.1
+  http: ^1.5.0
   # path: ^1.8.0
 
 dev_dependencies:

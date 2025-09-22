@@ -1,119 +1,178 @@
+import 'dart:async';
 import 'dart:io';
-
 import 'package:r34_02/features/posts/presentation/services/post_console_service.dart';
 
 class PostMenu {
   final PostConsoleService _postConsoleService;
+  Timer? _loadingTimer;
+  StreamSubscription<bool>? _loadingSub;
+  bool _isLoading = false;
 
-  PostMenu(this._postConsoleService);
-  void showMenu() {
+  PostMenu(this._postConsoleService) {
+    // Listen to loading stream
+    _loadingSub = _postConsoleService.loadingStream.listen((loading) {
+      _isLoading = loading;
+      if (loading) {
+        _startLoadingAnimation();
+      } else {
+        _stopLoadingAnimation();
+        print("\n✅ Done.\n");
+      }
+    });
+  }
+
+  Future<void> showMenu() async {
     while (true) {
       print("\n===== POST MANAGEMENT SYSTEM =====");
-      print("1.List All Posts");
-      print("2.View Post Details");
-      print("3.Create New Post");
-      print("4.Update Post");
-      print("5.Delete Post");
-      print("6.Exit");
+      print("1. List All Posts");
+      print("2. View Post Details");
+      print("3. Create New Post");
+      print("4. Update Post");
+      print("5. Delete Post");
+      print("6. Exit");
       print("Enter your choice (1-6)");
 
       final choice = stdin.readLineSync();
       switch (choice) {
         case '1':
-          _postConsoleService.displayAllPosts();
+          await _postConsoleService.displayAllPosts();
           break;
         case '2':
-          _viewPostMenu();
+          await _viewPostMenu();
           break;
         case '3':
-          _createPostMenu();
+          await _createPostMenu();
           break;
         case '4':
-          _updatePostMenu();
+          await _updatePostMenu();
           break;
         case '5':
-          _deletePostMenu();
+          await _deletePostMenu();
           break;
         case '6':
-          return; //to exit from this loop
+          return;
         default:
-          print("invalid choise, please try again");
+          print("Invalid choice, please try again.");
       }
     }
   }
 
-  void _viewPostMenu() {
+  Future<void> _viewPostMenu() async {
     print("\n===== POST DETAILS =====");
-
     print("Enter Post ID:");
     final id = stdin.readLineSync();
     if (id != null && id.isNotEmpty) {
-      _postConsoleService.displayPost(id);
+      await _postConsoleService.displayPost(id);
     }
   }
 
-  void _createPostMenu() {
+  Future<void> _createPostMenu() async {
     print("\n===== CREATE POST =====");
     print("Enter Post Title:");
     final title = stdin.readLineSync();
-    print("Enter Post Text:");
-    final text = stdin.readLineSync();
-    print("Enter Number of Likes:");
-    final numOfLikesStr = stdin.readLineSync();
+    print("Enter Post Body:");
+    final body = stdin.readLineSync();
+    // print("Enter Post Views (number):");
+    // final viewsStr = stdin.readLineSync();
+    print("Enter Tags (comma separated):");
+    final tagsStr = stdin.readLineSync();
+    print("Enter User ID (number):");
+    final userIdStr = stdin.readLineSync();
+
     if (title != null &&
         title.isNotEmpty &&
-        text != null &&
-        text.isNotEmpty &&
-        numOfLikesStr != null &&
-        numOfLikesStr.isNotEmpty) {
+        body != null &&
+        body.isNotEmpty &&
+        userIdStr != null &&
+        userIdStr.isNotEmpty) {
       try {
-        final numOfLikes = int.parse(numOfLikesStr);
-        _postConsoleService.createPost(title, text, numOfLikes);
+        final views = int.parse("0");
+        final userId = int.parse(userIdStr);
+        List<String> tags = tagsStr != null && tagsStr.isNotEmpty
+            ? tagsStr.split(',')
+            : [];
+
+        await _postConsoleService.createPost(title, body, views, tags, userId);
       } catch (e) {
-        print("Number of likes format is not valid");
+        print("❌ Views and User ID must be numbers.");
       }
     } else {
-      print("All Fields are required,please");
+      print("⚠️ All fields are required, please try again.");
     }
   }
 
-  void _updatePostMenu() {
+  Future<void> _updatePostMenu() async {
     print("\n===== UPDATE POST =====");
-
     print("Enter Post ID:");
     final id = stdin.readLineSync();
-    print("Enter new Post Title:");
-    final newTitle = stdin.readLineSync();
-    print("Enter new Post Text:");
-    final newText = stdin.readLineSync();
-    print("Enter new Number of Likes:");
-    final newNumOfLikesStr = stdin.readLineSync();
+    print("Enter New Post Title:");
+    final title = stdin.readLineSync();
+    print("Enter New Post Body:");
+    final body = stdin.readLineSync();
+    // print("Enter New Post Views (number):");
+    // final viewsStr = stdin.readLineSync();
+    print("Enter New Tags (comma separated):");
+    final tagsStr = stdin.readLineSync();
+    print("Enter New User ID (number):");
+    final userIdStr = stdin.readLineSync();
+
     if (id != null &&
         id.isNotEmpty &&
-        newTitle != null &&
-        newTitle.isNotEmpty &&
-        newText != null &&
-        newText.isNotEmpty &&
-        newNumOfLikesStr != null &&
-        newNumOfLikesStr.isNotEmpty) {
+        title != null &&
+        title.isNotEmpty &&
+        body != null &&
+        body.isNotEmpty &&
+        userIdStr != null &&
+        userIdStr.isNotEmpty) {
       try {
-        final newNumOfLikes = int.parse(newNumOfLikesStr);
-        _postConsoleService.updatePost(id, newTitle, newText, newNumOfLikes);
+        final views = int.parse("0");
+        final userId = int.parse(userIdStr);
+        List<String> tags = tagsStr != null && tagsStr.isNotEmpty
+            ? tagsStr.split(',')
+            : [];
+
+        await _postConsoleService.updatePost(
+          id,
+          title,
+          body,
+          views,
+          tags,
+          userId,
+        );
       } catch (e) {
-        print("Number of likes format is not valid");
+        print("❌ Views and User ID must be numbers.");
       }
     } else {
-      print("All Fields are required,please");
+      print("⚠️ All fields are required, please try again.");
     }
   }
 
-  void _deletePostMenu() {
+  Future<void> _deletePostMenu() async {
     print("\n===== DELETE POST =====");
-
     print("Enter Post ID:");
     final id = stdin.readLineSync();
     if (id != null && id.isNotEmpty) {
-      _postConsoleService.deletePost(id);
+      await _postConsoleService.deletePost(id);
     }
+  }
+
+  // 🔹 Spinner animation
+  void _startLoadingAnimation() {
+    int dotCount = 0;
+    _loadingTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
+      dotCount = (dotCount + 1) % 4; // cycle 0..3
+      stdout.write("\r⏳ Loading${'.' * dotCount}   ");
+    });
+  }
+
+  void _stopLoadingAnimation() {
+    _loadingTimer?.cancel();
+    _loadingTimer = null;
+    stdout.write("\r                          \r"); // clear line
+  }
+
+  void dispose() {
+    _loadingSub?.cancel();
+    _postConsoleService.dispose();
   }
 }

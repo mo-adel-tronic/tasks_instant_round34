@@ -7,7 +7,7 @@ import 'package:r34_02/features/posts/domain/repositories/post_repository.dart';
 class GetPost {
   final PostRepository repository;
   GetPost(this.repository);
-  Either<Failure, Post> call(GetPostParam params) {
+  Future<Either<Failure, Post>> call(GetPostParam params) {
     return repository.getPost(params.id);
   }
 }

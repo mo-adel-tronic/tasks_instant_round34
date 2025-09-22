@@ -11,31 +11,32 @@ class MainMenu {
 
   MainMenu(this._postMenu, this._productMenu, this._userMenu);
 
-  void showMainMenu() {
+  Future<void> showMainMenu() async {
     while (true) {
       print("\n===== MAIN MENU =====");
       print("1. Post System");
       print("2. Product System");
       print("3. User System");
       print("4. Exit");
-      print("Enter your choice (1-4)");
+      stdout.write("Enter your choice (1-4): ");
 
       final choice = stdin.readLineSync();
 
       switch (choice) {
         case '1':
-          _postMenu.showMenu();
+          await _postMenu.showMenu();
           break;
         case '2':
-          _productMenu.showMenu();
+          await _productMenu.showMenu();
           break;
         case '3':
-          _userMenu.showMenu();
+          await _userMenu.showMenu();
           break;
         case '4':
-          exit(0); //here exit from the project
+          print("👋 Exiting program...");
+          exit(0); // exit the program
         default:
-          print("Invalid choice. Please try again.");
+          print("❌ Invalid choice. Please try again.");
       }
     }
   }

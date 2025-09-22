@@ -7,7 +7,7 @@ import 'package:r34_02/features/users/domain/repositories/user_repository.dart';
 class DeleteUser {
   final UserRepository repository;
   DeleteUser(this.repository);
-  Either<Failure, bool> call(DeleteUserParam params) {
+  Future<Either<Failure, bool>> call(DeleteUserParam params) {
     return repository.deleteUser(params.id);
   }
 }

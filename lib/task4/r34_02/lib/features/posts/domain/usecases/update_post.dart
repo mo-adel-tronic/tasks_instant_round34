@@ -8,7 +8,7 @@ import 'package:r34_02/features/posts/domain/repositories/post_repository.dart';
 class UpdatePost {
   final PostRepository repository;
   UpdatePost(this.repository);
-  Either<Failure, Post> call(UpdatePostParam params) {
+  Future<Either<Failure, Post>> call(UpdatePostParam params) {
     return repository.updatePost(params.post);
   }
 }

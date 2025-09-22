@@ -14,7 +14,7 @@ class GetAllPost {
   gp(); instead of gp.call()
   
    */
-  Either<Failure, List<Post>> call() {
+  Future<Either<Failure, List<Post>>> call() {
     return repository.getAllPosts();
   }
 }

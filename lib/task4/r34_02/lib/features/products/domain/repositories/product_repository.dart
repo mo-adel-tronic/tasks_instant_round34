@@ -3,16 +3,18 @@ import 'package:r34_02/core/error/failures.dart';
 import '../entities/product.dart';
 
 abstract class ProductRepository {
-  Either<Failure, List<Product>> getAllProducts();
-  //why Either from dartz library?  getAllProduct will return List of product or failur
+  /// Returns all products or a failure.
+  Future<Either<Failure, List<Product>>> getAllProducts();
 
-  Either<Failure, Product> getProduct(String id);
-  Either<Failure, Product> createProduct(Product product);
-  Either<Failure, Product> updateProduct(Product product);
-  Either<Failure, bool> deleteProduct(String id);
+  /// Returns a single product by ID or a failure.
+  Future<Either<Failure, Product>> getProduct(String id);
+
+  /// Creates a new product and returns it or a failure.
+  Future<Either<Failure, Product>> createProduct(Product product);
+
+  /// Updates an existing product and returns it or a failure.
+  Future<Either<Failure, Product>> updateProduct(Product product);
+
+  /// Deletes a product by ID and returns true if deleted, false if not found, or a failure.
+  Future<Either<Failure, bool>> deleteProduct(String id);
 }
-
-//implement them in data layer
-
-//implement class use case for every method to use it only in presentation layer
-//Create use case for  getProduct , use case for createProduct , ...

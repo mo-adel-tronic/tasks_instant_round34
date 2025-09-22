@@ -7,7 +7,7 @@ import 'package:r34_02/features/posts/domain/repositories/post_repository.dart';
 class DeletePost {
   final PostRepository repository;
   DeletePost(this.repository);
-  Either<Failure, bool> call(DeletePostParam params) {
+  Future<Either<Failure, bool>> call(DeletePostParam params) {
     return repository.deletePost(params.id);
   }
 }

@@ -11,31 +11,44 @@ class UserRepositoryImpl implements UserRepository {
 
   UserRepositoryImpl({required this.userRemoteDataSource});
 
-  //return User if success or failur if failed
   @override
-  Either<Failure, List<User>> getAllUsers() {
+  Future<Either<Failure, List<User>>> getAllUsers() async {
     try {
-      return Right(userRemoteDataSource.getAllUsers());
+      final users = await userRemoteDataSource.getAllUsers();
+      return Right(users);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, User> getUser(String id) {
+  Future<Either<Failure, User>> getUser(String id) async {
     try {
-      return Right(userRemoteDataSource.getUser(id));
+      final user = await userRemoteDataSource.getUser(id);
+      return Right(user);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, User> createUser(User user) {
+  Future<Either<Failure, User>> createUser(User user) async {
     final model = UserModel(
       id: user.id,
       name: user.name,
@@ -44,38 +57,60 @@ class UserRepositoryImpl implements UserRepository {
     );
 
     try {
-      return Right(userRemoteDataSource.createUser(model));
+      final created = await userRemoteDataSource.createUser(model);
+      return Right(created);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, User> updateUser(User user) {
+  Future<Either<Failure, User>> updateUser(User user) async {
     final model = UserModel(
       id: user.id,
       name: user.name,
       email: user.email,
       gender: user.gender,
     );
+
     try {
-      return Right(userRemoteDataSource.updateUser(model));
+      final updated = await userRemoteDataSource.updateUser(model);
+      return Right(updated);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, bool> deleteUser(String id) {
+  Future<Either<Failure, bool>> deleteUser(String id) async {
     try {
-      return Right(userRemoteDataSource.deleteUser(id));
+      final deleted = await userRemoteDataSource.deleteUser(id);
+      return Right(deleted);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }

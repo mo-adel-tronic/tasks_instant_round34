@@ -11,31 +11,44 @@ class ProductRepositoryImpl implements ProductRepository {
 
   ProductRepositoryImpl({required this.productRemoteDataSource});
 
-  //return product if success or failur if failed
   @override
-  Either<Failure, List<Product>> getAllProducts() {
+  Future<Either<Failure, List<Product>>> getAllProducts() async {
     try {
-      return Right(productRemoteDataSource.getAllProducts());
+      final products = await productRemoteDataSource.getAllProducts();
+      return Right(products);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, Product> getProduct(String id) {
+  Future<Either<Failure, Product>> getProduct(String id) async {
     try {
-      return Right(productRemoteDataSource.getProduct(id));
+      final product = await productRemoteDataSource.getProduct(id);
+      return Right(product);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, Product> createProduct(Product product) {
+  Future<Either<Failure, Product>> createProduct(Product product) async {
     final pm = ProductModel(
       id: product.id,
       name: product.name,
@@ -44,38 +57,60 @@ class ProductRepositoryImpl implements ProductRepository {
     );
 
     try {
-      return Right(productRemoteDataSource.createProduct(pm));
+      final created = await productRemoteDataSource.createProduct(pm);
+      return Right(created);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, Product> updateProduct(Product product) {
+  Future<Either<Failure, Product>> updateProduct(Product product) async {
     final pm = ProductModel(
       id: product.id,
       name: product.name,
       price: product.price,
       description: product.description,
     );
+
     try {
-      return Right(productRemoteDataSource.updateProduct(pm));
+      final updated = await productRemoteDataSource.updateProduct(pm);
+      return Right(updated);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Either<Failure, bool> deleteProduct(String id) {
+  Future<Either<Failure, bool>> deleteProduct(String id) async {
     try {
-      return Right(productRemoteDataSource.deleteProduct(id));
+      final result = await productRemoteDataSource.deleteProduct(id);
+      return Right(result);
+    } on NotFoundException {
+      return Left(NotFoundFailure());
+    } on UnAuthorizedException {
+      return Left(UnAuthorizedFailure());
+    } on BadRequestException {
+      return Left(BadRequestFailure());
     } on ServerException {
       return Left(ServerFailure());
-    } catch (e) {
+    } catch (_) {
       return Left(UnexpectedFailure());
     }
   }

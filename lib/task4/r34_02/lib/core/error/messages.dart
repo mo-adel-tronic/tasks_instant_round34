@@ -16,6 +16,9 @@ mixin MapFailurMessages {
     return switch (f) {
       ServerFailure() => "Server Error",
       CacheFailure() => "Cache Error",
+      BadRequestFailure() => " BadRequest Error",
+      UnAuthorizedFailure() => "UnAuthorized Error",
+      NotFoundFailure() => "Not Found Error",
       UnexpectedFailure() => "Unexpected Error",
     };
   }

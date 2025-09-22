@@ -1,65 +1,97 @@
+import 'package:r34_02/core/constants/url_constants.dart';
 import 'package:r34_02/core/error/exceptions.dart';
+import 'package:r34_02/core/network/api_provider.dart';
 import 'package:r34_02/features/users/data/models/user_model.dart';
 
 abstract class UserRemoteDataSource {
-  List<UserModel> getAllUsers();
-  UserModel getUser(String id);
-  UserModel createUser(UserModel model);
-  UserModel updateUser(UserModel model);
-  bool deleteUser(String id);
+  Future<List<UserModel>> getAllUsers();
+  Future<UserModel> getUser(String id);
+  Future<UserModel> createUser(UserModel model);
+  Future<UserModel> updateUser(UserModel model);
+  Future<bool> deleteUser(String id);
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
-  final List<UserModel> _users = [
-    UserModel(id: "1", name: "p1", email: "test@test.com", gender: "male"),
-    UserModel(id: "2", name: "p2", email: "test@test.com", gender: "female"),
-    UserModel(id: "3", name: "p3", email: "test@test.com", gender: "male"),
-    UserModel(id: "4", name: "p4", email: "test@test.com", gender: "female"),
-    UserModel(id: "5", name: "p5", email: "test@test.com", gender: "male"),
-  ];
+  final APIProvider apiProvider;
+  UserRemoteDataSourceImpl({required this.apiProvider});
+
+  static const String _baseUrl =
+      "${URLConstants.baseURL}${URLConstants.usersEndPoint}";
 
   @override
-  List<UserModel> getAllUsers() {
-    return _users;
-  }
-
-  @override
-  UserModel getUser(String id) {
+  Future<List<UserModel>> getAllUsers() async {
     try {
-      return _users.firstWhere((p) => p.id == id); //or use orElse
+      final data = await apiProvider.get(_baseUrl);
+      final List usersJson = data["users"] as List;
+      return usersJson
+          .map((json) => UserModel.fromJson(json as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      throw ServerException(); //Your exception
-    }
-  }
-
-  @override
-  UserModel createUser(UserModel model) {
-    /*create new User with data:
-     newId = DateTime.now()..
-     newemail = model.email
-    */
-    final UserModel newUser = model.copyWith(
-      newId: DateTime.now().microsecondsSinceEpoch.toString(),
-    );
-    _users.add(newUser);
-    return newUser;
-  }
-
-  @override
-  UserModel updateUser(UserModel model) {
-    final int userIndex = _users.indexWhere((p) => p.id == model.id);
-    if (userIndex != -1) {
-      _users[userIndex] = model; //update data
-      return model;
-    } else {
       throw ServerException();
     }
   }
 
   @override
-  bool deleteUser(String id) {
-    final oldLength = _users.length;
-    _users.removeWhere((p) => id == p.id);
-    return _users.length < oldLength;
+  Future<UserModel> getUser(String id) async {
+    try {
+      final data = await apiProvider.get("$_baseUrl/$id");
+      return UserModel.fromJson(data as Map<String, dynamic>);
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<UserModel> createUser(UserModel model) async {
+    try {
+      final data = await apiProvider.post(
+        "$_baseUrl/add",
+        body: model.toJsonCreate(),
+      );
+      return UserModel.fromJson(data as Map<String, dynamic>);
+    } on NotFoundException {
+      throw NotFoundException();
+    } on BadRequestException {
+      throw BadRequestException();
+    } on UnAuthorizedException {
+      throw UnAuthorizedException();
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<UserModel> updateUser(UserModel model) async {
+    try {
+      final data = await apiProvider.put(
+        "$_baseUrl/${model.id}",
+        body: model.toJsonCreate(),
+      );
+      return UserModel.fromJson(data as Map<String, dynamic>);
+    } on NotFoundException {
+      throw NotFoundException();
+    } on BadRequestException {
+      throw BadRequestException();
+    } on UnAuthorizedException {
+      throw UnAuthorizedException();
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<bool> deleteUser(String id) async {
+    try {
+      await apiProvider.delete("$_baseUrl/$id");
+      return true;
+    } on NotFoundException {
+      throw NotFoundException();
+    } on BadRequestException {
+      throw BadRequestException();
+    } on UnAuthorizedException {
+      throw UnAuthorizedException();
+    } catch (e) {
+      throw ServerException();
+    }
   }
 }

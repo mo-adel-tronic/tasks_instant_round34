@@ -8,7 +8,7 @@ import 'package:r34_02/features/users/domain/repositories/user_repository.dart';
 class CreateUser {
   final UserRepository repository;
   CreateUser(this.repository);
-  Either<Failure, User> call(CreateUserParam params) {
+  Future<Either<Failure, User>> call(CreateUserParam params) {
     return repository.createUser(params.user);
   }
 }

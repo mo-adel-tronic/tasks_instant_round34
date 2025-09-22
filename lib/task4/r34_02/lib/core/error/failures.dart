@@ -19,4 +19,10 @@ class ServerFailure extends Failure {}
 
 class CacheFailure extends Failure {}
 
+class BadRequestFailure extends Failure {}
+
+class UnAuthorizedFailure extends Failure {}
+
+class NotFoundFailure extends Failure {}
+
 class UnexpectedFailure extends Failure {}

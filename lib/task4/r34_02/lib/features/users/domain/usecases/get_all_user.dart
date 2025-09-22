@@ -14,7 +14,7 @@ class GetAllUser {
   gp(); instead of gp.call()
   
    */
-  Either<Failure, List<User>> call() {
+  Future<Either<Failure, List<User>>> call() {
     return repository.getAllUsers();
   }
 }
