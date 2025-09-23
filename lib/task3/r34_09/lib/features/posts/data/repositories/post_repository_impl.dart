@@ -8,6 +8,9 @@ import 'package:task7/features/posts/domain/repositories/post_repository.dart';
 
 class PostRepositoryImpl implements PostRepository {
   late final PostRemoteDatasource remoteDatasource;
+
+  PostRepositoryImpl({required this.remoteDatasource});
+
   @override
   Future<Either<Failure, Post>> createPost(Post post) async {
     try {
@@ -24,10 +27,10 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> deletePost(String id) async {
+  Future<Either<Failure, bool>> deletePost(String id) async {
     try {
       final result = remoteDatasource.deletePost(id);
-      return Right(result);
+      return Right(result as bool);
     } on ServerException {
       return Left(ServerFailure());
     }
@@ -54,9 +57,13 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> updatePost(String id, Post post) async {
+  Future<Either<Failure, Post>> updatePost(Post post) async {
     try {
-      final productmodel = PostModel(id: post.id, title: post.title, content: post.content, createAt: post.createAt);
+      final productmodel = PostModel(
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          createAt: post.createAt);
       final updateproduct = remoteDatasource.updatePost(productmodel);
       return Right(updateproduct);
     } on ServerException {

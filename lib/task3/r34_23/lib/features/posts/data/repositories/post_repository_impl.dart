@@ -38,7 +38,7 @@ class PostRepositoryImpl implements PostRepository {
         id: post.id,
         title: post.title,
         content: post.content,
-        userId: post.userId,
+        
       );
       final newPost = remoteDataSource.createPost(postModel);
       return Right(newPost);
@@ -54,7 +54,7 @@ class PostRepositoryImpl implements PostRepository {
         id: post.id,
         title: post.title,
         content: post.content,
-        userId: post.userId,
+        
       );
       final updatedPost = remoteDataSource.updatePost(postModel);
       return Right(updatedPost);

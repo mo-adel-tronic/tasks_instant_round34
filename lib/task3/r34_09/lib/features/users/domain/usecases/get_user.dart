@@ -8,7 +8,7 @@ class GetUser {
   final UserRepository repository;
   GetUser(this.repository);
     Future<Either<Failure, User>> call(getUserparams params) {
-    return repository.deleteUser(params.id);
+    return repository.getUser(params.id);
   }
 }
 

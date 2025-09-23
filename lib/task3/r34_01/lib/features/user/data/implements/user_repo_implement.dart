@@ -7,7 +7,7 @@ import 'package:r34_01/features/user/domain/entity/user_entity.dart';
 import 'package:r34_01/features/user/domain/repository/user_repository.dart';
 
 class UserRepoImplement implements UserRepository {
-  final UserRemoteDatasource remoteDatasource;
+  final UserRemoteDataSource remoteDatasource;
   UserRepoImplement({required this.remoteDatasource});
 
   @override

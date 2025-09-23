@@ -9,8 +9,8 @@ class CreateUser {
 
   CreateUser(this.repository);
 
-  Either<Failure, User> call(User user) {
-    return repository.createUser(user);
+  Either<Failure, User> call(CreateUserParams params) {
+    return repository.createUser(params.user);
   }
 }
 

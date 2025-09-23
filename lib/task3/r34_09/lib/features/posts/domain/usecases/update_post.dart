@@ -8,15 +8,14 @@ class UpdatePost {
   final PostRepository repository;
   UpdatePost(this.repository);
   Future<Either<Failure, Post>> call(UpdatePostparams params) {
-    return repository.updatePost(params.id, params.post);
+    return repository.updatePost(  params.post);
   }
 }
 
 class UpdatePostparams extends Equatable {
-  final String id;
-  final Post post;
+   final Post post;
 
-  const UpdatePostparams({required this.id, required this.post});
+  const UpdatePostparams({ required this.post});
   @override
   List<Object?> get props => [id, post];
 }

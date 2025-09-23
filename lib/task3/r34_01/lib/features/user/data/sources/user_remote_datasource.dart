@@ -1,7 +1,7 @@
 import 'package:r34_01/core/error/exceptions.dart';
 import 'package:r34_01/features/user/data/model/user_model.dart';
 
-abstract class UserRemoteDatasource {
+abstract class UserRemoteDataSource {
   List<UserModel> getAllUsers();
   UserModel getUser(String id);
   UserModel createUser(UserModel user);
@@ -9,15 +9,15 @@ abstract class UserRemoteDatasource {
   bool deleteUser(String id);
 }
 
-class UserRemoteDataSourceImpl implements UserRemoteDatasource {
+class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final List<UserModel> _users = [
-    const UserModel(
+     UserModel(
       name: 'user 1',
       id: '1',
       description: 'description 1',
       price: 10.0,
     ),
-    const UserModel(
+     UserModel(
       name: 'user 2',
       id: '2',
       description: 'description 2',
@@ -27,7 +27,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDatasource {
 
   @override
   List<UserModel> getAllUsers() {
-    throw _users;
+    return _users;
   }
 
   @override

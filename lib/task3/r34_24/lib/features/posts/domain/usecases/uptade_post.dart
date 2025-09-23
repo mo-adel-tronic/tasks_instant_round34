@@ -9,8 +9,8 @@ class UpdatePost {
 
   UpdatePost(this.repository);
 
-  Either<Failure, Post> call(Post post) {
-    return repository.updatePost(post);
+  Either<Failure, Post> call(UpdatePostParams params) {
+    return repository.updatePost(params.post);
   }
 }
 

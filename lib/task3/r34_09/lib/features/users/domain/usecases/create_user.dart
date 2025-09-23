@@ -16,7 +16,7 @@ class CreateUser {
 
 class createUserparams extends Equatable {
   final User user;
-  const createUserparams({required this.user});
+  const createUserparams({required this.user });
   @override
   List<Object?> get props => [user];
 }

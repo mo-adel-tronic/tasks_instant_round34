@@ -6,7 +6,7 @@ abstract class PostRepository {
   Future<Either<Failure, List<Post>>> getAllPost();
   Future<Either<Failure, Post>> getPost(String id);
   Future<Either<Failure, Post>> createPost(Post post);
-  Future<Either<Failure, Post>> updatePost(String id, Post post);
-  Future<Either<Failure, Post>> deletePost(String id);
+  Future<Either<Failure, Post>> updatePost(  Post post);
+  Future<Either<Failure, bool>> deletePost(String id);
 
 }

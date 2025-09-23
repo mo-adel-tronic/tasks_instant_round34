@@ -7,7 +7,7 @@ import 'package:r34_01/features/book/domain/entity/book_entity.dart';
 import 'package:r34_01/features/book/domain/repository/book_repository.dart';
 
 class BookRepoImplment implements BookRepository {
-  final BookRemoteDatasource remoteDatasource;
+  final BookRemoteDataSource remoteDatasource;
   BookRepoImplment({required this.remoteDatasource});
 
   @override

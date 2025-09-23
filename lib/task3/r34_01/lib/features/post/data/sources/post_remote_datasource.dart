@@ -1,7 +1,7 @@
 import 'package:r34_01/core/error/exceptions.dart';
 import 'package:r34_01/features/post/data/model/post_model.dart';
 
-abstract class PostRemoteDatasource {
+abstract class PostRemoteDataSource {
   List<PostModel> getAllPosts();
   PostModel getPost(String id);
   PostModel createPost(PostModel post);
@@ -9,15 +9,15 @@ abstract class PostRemoteDatasource {
   bool deletePost(String id);
 }
 
-class PostRemoteDataSourceImpl implements PostRemoteDatasource {
+class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   final List<PostModel> _posts = [
-    const PostModel(
+     PostModel(
       name: 'Post 1',
       id: '1',
       description: 'description 1',
       price: 10.0,
     ),
-    const PostModel(
+     PostModel(
       name: 'Post 2',
       id: '2',
       description: 'description 2',
@@ -27,7 +27,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
 
   @override
   List<PostModel> getAllPosts() {
-    throw _posts;
+    return _posts;
   }
 
   @override

@@ -11,8 +11,8 @@ abstract class UserRemoteDataSource {
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final List<UserModel> _users = [
-    const UserModel(id: "1", name: "User 1", email: "user1@email.com"),
-    const UserModel(id: "2", name: "User 2", email: "user2@email.com"),
+    const UserModel(id: "1", name: "Mahmoud", email: "Mahmoud227@gmail.com"),
+    const UserModel(id: "2", name: "Masry", email: "Masry334@gmail.com"),
   ];
 
   @override

@@ -9,8 +9,8 @@ class CreateBook {
 
   CreateBook(this.repository);
 
-  Either<Failure, Book> call(Book book) {
-    return repository.CreateBook(book);
+  Either<Failure, Book> call(CreateBookparams params) {
+    return repository.CreateBook(params.book);
   }
 }
 class CreateBookparams extends Equatable{

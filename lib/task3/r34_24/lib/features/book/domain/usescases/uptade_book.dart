@@ -9,8 +9,8 @@ class UpdateBook {
 
   UpdateBook(this.repository);
 
-  Either<Failure, Book> call(Book book) {
-    return repository.updateBook(book);
+  Either<Failure, Book> call(UptadeBookParams params) {
+    return repository.updateBook(params.book);
   }
 }
 class UptadeBookParams extends Equatable{

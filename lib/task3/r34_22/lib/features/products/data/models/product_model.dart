@@ -33,6 +33,6 @@ ProductModel copywith({String? id,String? name,String? descreption,double? price
     name: name??this.name,
     description: descreption??this.description,
     price: price??this.price
-  );
+);
 }
 }

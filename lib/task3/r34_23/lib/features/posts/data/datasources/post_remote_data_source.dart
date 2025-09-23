@@ -11,18 +11,8 @@ abstract class PostRemoteDataSource {
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   final List<PostModel> _posts = [
-    const PostModel(
-      id: "1",
-      title: "First Post",
-      content: "This is the first post",
-      userId: "1",
-    ),
-    const PostModel(
-      id: "2",
-      title: "Second Post",
-      content: "This is the second post",
-      userId: "2",
-    ),
+    const PostModel( id: "1", title: "Post1", content: "This is the first post",  ),
+    const PostModel( id: "2",  title: "Post2",  content: "This is the second post",),
   ];
 
   @override

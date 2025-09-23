@@ -5,7 +5,7 @@ class PostModel extends Post {
     required super.id,
     required super.title,
     required super.content,
-    required super.userId,
+    
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
@@ -13,7 +13,7 @@ class PostModel extends Post {
       id: json['id'],
       title: json['title'],
       content: json['content'],
-      userId: json['userId'],
+      
     );
   }
 
@@ -22,7 +22,7 @@ class PostModel extends Post {
       'id': id,
       'title': title,
       'content': content,
-      'userId': userId,
+      
     };
   }
 
@@ -36,7 +36,7 @@ class PostModel extends Post {
       id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
-      userId: userId ?? this.userId,
+      
     );
   }
 }

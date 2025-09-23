@@ -7,7 +7,7 @@ import 'package:r34_01/features/post/domain/entity/post_entity.dart';
 import 'package:r34_01/features/post/domain/repository/post_repository.dart';
 
 class PostRepoImplment implements PostRepository {
-  final PostRemoteDatasource remoteDatasource;
+  final PostRemoteDataSource remoteDatasource;
   PostRepoImplment({required this.remoteDatasource});
 
   @override
@@ -71,7 +71,4 @@ class PostRepoImplment implements PostRepository {
       return Left(ServerFailure());
     }
   }
-  
-
-  }
-
+}

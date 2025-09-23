@@ -7,7 +7,7 @@ class GetProduct {
   final ProductRepository repository;
   GetProduct(this.repository);
   Future<Either<Failure, Product>> call(getProductparams params) {
-    return repository.deleteProduct(params.id);
+    return repository.getProduct(params.id);
   }
  
 }

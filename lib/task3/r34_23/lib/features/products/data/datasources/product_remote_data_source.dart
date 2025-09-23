@@ -12,8 +12,8 @@ abstract class ProductRemoteDataSource {
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final List<ProductModel> _products = [
-   const ProductModel(id: "1", name: "product 1", descreption: "descreption 1", price: 10.0),
-   const ProductModel(id: "2", name: "product 2", descreption: "descreption 2", price: 10.0)
+   const ProductModel(id: "1", name: "Samsung a55", descreption: "Android", price: 20000.0),
+   const ProductModel(id: "2", name: "iPhone 13", descreption: "iOS", price: 30000.0)
     
   ];
 

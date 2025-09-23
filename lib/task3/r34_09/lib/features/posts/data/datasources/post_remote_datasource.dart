@@ -6,21 +6,21 @@ abstract class PostRemoteDatasource {
   PostModel getPost(String id);
   PostModel createPost(PostModel post);
   PostModel updatePost(PostModel post);
-  PostModel deletePost(String id);
+  bool deletePost(String id);
 }
 //test
 class PostRemoteDatasourceImpl implements PostRemoteDatasource {
   final List<PostModel> _post = [
     PostModel(
         id: '1',
-        title: 'title',
+        title: 'cdscds',
         content: 'content',
-        createAt: DateTime.fromMillisecondsSinceEpoch(1731016000000)),
+        createAt: 141),
     PostModel(
         id: '2',
         title: 'title',
         content: 'content',
-        createAt: DateTime.fromMillisecondsSinceEpoch(1631015000000)),
+        createAt: 291298),
   ];
   @override
   PostModel createPost(PostModel post) {
@@ -31,14 +31,10 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
   }
 
   @override
-  PostModel deletePost(String id) {
-    try {
-      final post = _post.firstWhere((p) => p.id == id);
-      _post.remove(post);
-      return post;
-    } catch (e) {
-      throw ServerException();
-    }
+  bool deletePost(String id) {
+        final initialLingth = _post.length;
+      _post.removeWhere((product)=>product.id ==id);
+      return _post.length< initialLingth;
   }
 
   @override

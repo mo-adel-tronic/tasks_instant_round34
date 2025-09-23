@@ -6,7 +6,7 @@ import 'package:task7/features/products/domain/repositories/product_repository.d
 class DeleteProduct {
   final ProductRepository repository;
   DeleteProduct(this.repository);
-    Future<Either<Failure, Product>> call(DeleteProductparams params) {
+    Future<Either<Failure, bool>> call(DeleteProductparams params) {
     return repository.deleteProduct(params.id);
   }
  

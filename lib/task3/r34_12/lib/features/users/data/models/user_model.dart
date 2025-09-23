@@ -7,7 +7,6 @@ class UserModel extends User {
     required super.email,
   });
 
-  // from json to object
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],
@@ -16,7 +15,6 @@ class UserModel extends User {
     );
   }
 
-  // from object to json
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -36,14 +34,4 @@ class UserModel extends User {
       email: email ?? this.email,
     );
   }
-}
-
-final UserModel userModel = const UserModel(
-  id: '1',
-  name: 'User 1',
-  email: 'user1@example.com',
-);
-
-void main() {
-  print(userModel.copyWith());
 }

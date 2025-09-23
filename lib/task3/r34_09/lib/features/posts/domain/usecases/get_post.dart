@@ -8,7 +8,7 @@ class GetPost {
   final PostRepository repository;
   GetPost(this.repository);
   Future<Either<Failure, Post>> call(getPostparams params) {
-    return repository.deletePost(params.id);
+    return repository.getPost(params.id);
   }
 }
 

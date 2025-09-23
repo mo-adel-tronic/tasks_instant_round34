@@ -9,8 +9,8 @@ class UpdateUser {
 
   UpdateUser(this.repository);
 
-  Either<Failure, User> call(User user) {
-    return repository.updateUser(user);
+  Either<Failure, User> call(UpdateUserParams params) {
+    return repository.updateUser(params.user);
   }
 }
 

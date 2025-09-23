@@ -9,6 +9,7 @@ import 'package:task7/features/products/domain/repositories/product_repository.d
 
 class ProductRepositoryImpl implements ProductRepository {
   late final ProductRemoteDatasource remoteDatasource;
+  ProductRepositoryImpl({required this.remoteDatasource});
   @override
   Future<Either<Failure, Product>> createProduct(Product product) async {
     try {
@@ -25,10 +26,10 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Either<Failure, Product>> deleteProduct(String id) async {
+  Future<Either<Failure, bool>> deleteProduct(String id) async {
     try {
       final result = remoteDatasource.deleteProduct(id);
-      return Right(result);
+      return Right(result as bool);
     } on ServerException {
       return Left(ServerFailure());
     }
@@ -56,7 +57,7 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Either<Failure, Product>> updateProducts(
-      String id, Product product) async {
+        Product product) async {
     try {
       final productmodel = ProductModel(
           id: product.id,

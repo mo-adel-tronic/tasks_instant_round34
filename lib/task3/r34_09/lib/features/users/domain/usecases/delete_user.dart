@@ -7,7 +7,7 @@ import 'package:task7/features/users/domain/repositories/user_repository.dart';
 class DeleteUser {
   final UserRepository repository;
   DeleteUser(this.repository);
-  Future<Either<Failure, User>> call(DeleteUserparams params) {
+  Future<Either<Failure, bool>> call(DeleteUserparams params) {
     return repository.deleteUser(params.id);
   }
  

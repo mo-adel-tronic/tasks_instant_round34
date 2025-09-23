@@ -7,13 +7,13 @@ abstract class ProductRemoteDatasource {
   ProductModel getProduct(String id);
   ProductModel createProduct(ProductModel product);
   ProductModel updateProducts(ProductModel product);
-  ProductModel deleteProduct(String id);
+  bool deleteProduct(String id);
 }
 
 class ProductRemoteDatasourceImpl implements ProductRemoteDatasource {
   final List<ProductModel> _products = [
-      ProductModel(id: '1', name: 'mobile', description: 'apple', price: 5),
-      ProductModel(id: '2', name: 'laptop', description: 'dell', price: 10),
+    ProductModel(id: '1', name: 'mobile', description: 'apple', price: 5),
+    ProductModel(id: '2', name: 'laptop', description: 'dell', price: 10),
   ];
 
   @override
@@ -25,19 +25,17 @@ class ProductRemoteDatasourceImpl implements ProductRemoteDatasource {
   }
 
   @override
-  ProductModel deleteProduct(String id) {
-    try {
-      final product = _products.firstWhere((p) => p.id == id);
-      _products.remove(product);
-      return product;
-    } catch (e) {
-      throw ServerException();
-    }
+  bool deleteProduct(String id) {
+   
+      final initialLingth = _products.length;
+      _products.removeWhere((product)=>product.id ==id);
+      return _products.length< initialLingth;
+   
   }
 
   @override
   List<ProductModel> getAllProducts() {
-    return _products;
+     return _products;
   }
 
   @override

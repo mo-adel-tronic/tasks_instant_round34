@@ -23,7 +23,7 @@ class UsersModel extends User {
     String? id,
     String? name,
     String? email,
-    double? password,
+    String? password,
   }) {
     return UsersModel(
         id: id ?? this.id,

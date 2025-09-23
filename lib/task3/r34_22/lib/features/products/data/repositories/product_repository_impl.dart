@@ -12,7 +12,7 @@ class ProductRepositoryImpl implements ProductRepository {
   ProductRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Either<Failure, List<Product>> getallproduct() {
+  Either<Failure, List<Product>> GetAllProducts() {
     try {
       final remoteProducts = remoteDataSource.getAllProducts();
       return Right(remoteProducts);
@@ -22,7 +22,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Either<Failure, Product> getproduct(String id) {
+  Either<Failure, Product> GetProduct(String id) {
     try {
       final remoteProduct = remoteDataSource.getProduct(id);
       return Right(remoteProduct);
@@ -32,7 +32,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Either<Failure, Product> createproduct(Product product) {
+  Either<Failure, Product> CreateProduct(Product product) {
     try {
       final productModel = ProductModel(
         id: product.id,
@@ -49,7 +49,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Either<Failure, Product> updateproduct(Product product) {
+  Either<Failure, Product> UpdateProduct(Product product) {
     try {
       final productModel = ProductModel(
         id: product.id,

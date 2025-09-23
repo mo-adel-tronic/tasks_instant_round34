@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:task7/features/posts/domain/entities/post.dart';
 
 class PostModel extends Post {
@@ -30,7 +32,7 @@ class PostModel extends Post {
     String? id,
     String? title,
     String? content,
-    DateTime? createAt,
+    int? createAt,
   }) {
     return PostModel(
         id: id ?? this.id,

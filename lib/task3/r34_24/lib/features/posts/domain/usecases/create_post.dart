@@ -9,8 +9,8 @@ class CreatePost {
 
   CreatePost(this.repository);
 
-  Either<Failure, Post> call(Post post) {
-    return repository.createPost(post);
+  Either<Failure, Post> call(CreatePostParams params) {
+    return repository.createPost(params.post);
   }
 }
 

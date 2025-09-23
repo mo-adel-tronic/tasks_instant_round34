@@ -6,15 +6,18 @@ abstract class UserRemoteDatesources {
   UsersModel getUser(String id);
   UsersModel createUser(UsersModel user);
   UsersModel updateUser(UsersModel user);
-  UsersModel deleteUser(String id);
+  bool deleteUser(String id);
 }
 
 class UserRemoteDatesourcesImbl implements UserRemoteDatesources {
+
+
+  
   final List<UsersModel> _user = [
     UsersModel(
-        id: '1', name: 'title', email: 'User1@gmail.com', password: 123456),
+        id: '1', name: 'title', email: 'User1@gmail.com', password: '123456'),
     UsersModel(
-        id: '2', name: 'title', email: 'user2@gmail.com', password: 123456),
+        id: '2', name: 'title', email: 'user2@gmail.com', password: '123456'),
   ];
 
   @override
@@ -26,14 +29,10 @@ class UserRemoteDatesourcesImbl implements UserRemoteDatesources {
   }
 
   @override
-  UsersModel deleteUser(String id) {
-    try {
-      final user = _user.firstWhere((p) => p.id == id);
-      _user.remove(user);
-      return user;
-    } catch (e) {
-      throw ServerException();
-    }
+  bool deleteUser(String id) {
+        final initialLingth = _user.length;
+      _user.removeWhere((product)=>product.id ==id);
+      return _user.length< initialLingth;
   }
 
   @override

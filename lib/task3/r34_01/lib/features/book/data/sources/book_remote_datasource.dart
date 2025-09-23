@@ -1,7 +1,7 @@
 import 'package:r34_01/core/error/exceptions.dart';
 import 'package:r34_01/features/book/data/model/book_model.dart';
 
-abstract class BookRemoteDatasource {
+abstract class BookRemoteDataSource {
   List<BookModel> getAllBooks();
   BookModel getBook(String id);
   BookModel createBook(BookModel book);
@@ -9,15 +9,15 @@ abstract class BookRemoteDatasource {
   bool deleteBook(String id);
 }
 
-class BookRemoteDataSourceImpl implements BookRemoteDatasource {
+class BookRemoteDataSourceImpl implements BookRemoteDataSource {
   final List<BookModel> _books = [
-    const BookModel(
+     BookModel(
       name: 'Book 1',
       id: '1',
       description: 'description 1',
       price: 10.0,
     ),
-    const BookModel(
+     BookModel(
       name: 'Book 2',
       id: '2',
       description: 'description 2',
@@ -27,7 +27,7 @@ class BookRemoteDataSourceImpl implements BookRemoteDatasource {
 
   @override
   List<BookModel> getAllBooks() {
-    throw _books;
+    return _books;
   }
 
   @override

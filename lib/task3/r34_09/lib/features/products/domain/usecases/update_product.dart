@@ -6,17 +6,16 @@ import 'package:task7/features/products/domain/repositories/product_repository.d
 
 class UpdateProduct {
   final ProductRepository repository;
-  UpdateProduct(this.repository);
+  UpdateProduct(this.repository); 
   Future<Either<Failure, Product>> call(UpdateProductparams params) {
-    return repository.updateProducts(params.id, params.product);
+    return repository.updateProducts( params.product);
   }
 }
 
 class UpdateProductparams extends Equatable {
-  final String id;
-  final Product product;
+   final Product product;
 
-  const UpdateProductparams({required this.id, required this.product});
+  const UpdateProductparams({ required this.product});
   @override
-  List<Object?> get props => [id, product];
+  List<Object?> get props => [ product];
 }
