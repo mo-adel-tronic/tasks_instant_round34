@@ -1,0 +1,15 @@
+import 'package:dartz/dartz.dart';
+import 'package:task3/core/error/failures.dart';
+import 'package:task3/features/posts/domain/entities/post.dart';
+import 'package:task3/features/posts/domain/repositories/posts_repository.dart';
+
+
+class GetAllPosts {
+  final PostRepository repository;
+
+  GetAllPosts(this.repository);
+
+  Future<Either<Failure, List<Post>>> call() async{
+    return await repository.getAllPosts();
+  }
+}
