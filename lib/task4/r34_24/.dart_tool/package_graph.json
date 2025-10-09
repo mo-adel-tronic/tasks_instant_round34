@@ -9,7 +9,8 @@
       "dependencies": [
         "dartz",
         "equatable",
-        "get_it"
+        "get_it",
+        "http"
       ],
       "devDependencies": [
         "lints",
@@ -472,6 +473,16 @@
       "dependencies": [
         "meta",
         "path"
+      ]
+    },
+    {
+      "name": "http",
+      "version": "1.5.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
       ]
     }
   ],
