@@ -1,0 +1,24 @@
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:task4/core/error/failures.dart';
+import 'package:task4/features/users/domain/entities/user.dart';
+import 'package:task4/features/users/domain/repositories/user_repository.dart';
+
+class GetUser {
+  final UserRepository repository;
+
+  GetUser(this.repository);
+
+  Future<Either<Failure, User>> call(GetUserParams params) async {
+    return await repository.getUser(params.id);
+  }
+}
+
+class GetUserParams extends Equatable {
+  final String id;
+
+  const GetUserParams({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}
